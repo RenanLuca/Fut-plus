@@ -11,7 +11,7 @@ CREATE TYPE "Rank" AS ENUM ('BRASILEIRAO', 'CHAMPIONS_LEAGUE', 'BALLON_DOR');
 CREATE TYPE "FrequencyType" AS ENUM ('EVENTUAL', 'MONTHLY');
 
 -- CreateEnum
-CREATE TYPE "GroupUserType" AS ENUM ('MONTHLY', 'DAILY', 'GUEST');
+CREATE TYPE "GroupMemberType" AS ENUM ('MONTHLY', 'DAILY', 'GUEST', 'OWNER');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -29,14 +29,14 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
-CREATE TABLE "GuestUser" (
+CREATE TABLE "guest_users" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "position" "Position" NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "GuestUser_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "guest_users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -55,17 +55,17 @@ CREATE TABLE "groups" (
 );
 
 -- CreateTable
-CREATE TABLE "group_users" (
+CREATE TABLE "group_members" (
     "id" TEXT NOT NULL,
     "group_id" TEXT NOT NULL,
     "user_id" TEXT,
-    "rank" "Rank" NOT NULL,
-    "type" "GroupUserType" NOT NULL,
+    "rank" "Rank",
+    "type" "GroupMemberType" NOT NULL,
     "guest_user_id" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "group_users_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "group_members_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -127,7 +127,7 @@ CREATE TABLE "match_team_players" (
 );
 
 -- CreateTable
-CREATE TABLE "GroupPayment" (
+CREATE TABLE "group_payments" (
     "id" TEXT NOT NULL,
     "group_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
@@ -136,17 +136,17 @@ CREATE TABLE "GroupPayment" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "GroupPayment_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "group_payments_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "group_users_group_id_user_id_key" ON "group_users"("group_id", "user_id");
+CREATE UNIQUE INDEX "group_members_group_id_user_id_key" ON "group_members"("group_id", "user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "group_users_group_id_guest_user_id_key" ON "group_users"("group_id", "guest_user_id");
+CREATE UNIQUE INDEX "group_members_group_id_guest_user_id_key" ON "group_members"("group_id", "guest_user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "group_match_presences_groupMatchId_userId_key" ON "group_match_presences"("groupMatchId", "userId");
@@ -164,43 +164,43 @@ CREATE UNIQUE INDEX "match_team_players_match_team_id_guest_user_id_key" ON "mat
 ALTER TABLE "groups" ADD CONSTRAINT "groups_owner_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "group_users" ADD CONSTRAINT "group_users_guest_user_id_fkey" FOREIGN KEY ("guest_user_id") REFERENCES "GuestUser"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "group_members" ADD CONSTRAINT "group_members_guest_user_id_fkey" FOREIGN KEY ("guest_user_id") REFERENCES "guest_users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "group_users" ADD CONSTRAINT "group_users_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "group_members" ADD CONSTRAINT "group_members_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "groups"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "group_users" ADD CONSTRAINT "group_users_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "group_members" ADD CONSTRAINT "group_members_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "group_invites" ADD CONSTRAINT "group_invites_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "group_invites" ADD CONSTRAINT "group_invites_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "group_matches" ADD CONSTRAINT "group_matches_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "group_matches" ADD CONSTRAINT "group_matches_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "groups"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "group_match_presences" ADD CONSTRAINT "group_match_presences_groupMatchId_fkey" FOREIGN KEY ("groupMatchId") REFERENCES "group_matches"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "group_match_presences" ADD CONSTRAINT "group_match_presences_groupMatchId_fkey" FOREIGN KEY ("groupMatchId") REFERENCES "group_matches"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "group_match_presences" ADD CONSTRAINT "group_match_presences_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "group_match_presences" ADD CONSTRAINT "group_match_presences_guest_user_id_fkey" FOREIGN KEY ("guest_user_id") REFERENCES "GuestUser"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "group_match_presences" ADD CONSTRAINT "group_match_presences_guest_user_id_fkey" FOREIGN KEY ("guest_user_id") REFERENCES "guest_users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "match_teams" ADD CONSTRAINT "match_teams_group_match_id_fkey" FOREIGN KEY ("group_match_id") REFERENCES "group_matches"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "match_teams" ADD CONSTRAINT "match_teams_group_match_id_fkey" FOREIGN KEY ("group_match_id") REFERENCES "group_matches"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "match_team_players" ADD CONSTRAINT "match_team_players_match_team_id_fkey" FOREIGN KEY ("match_team_id") REFERENCES "match_teams"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "match_team_players" ADD CONSTRAINT "match_team_players_match_team_id_fkey" FOREIGN KEY ("match_team_id") REFERENCES "match_teams"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "match_team_players" ADD CONSTRAINT "match_team_players_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "match_team_players" ADD CONSTRAINT "match_team_players_guest_user_id_fkey" FOREIGN KEY ("guest_user_id") REFERENCES "GuestUser"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "match_team_players" ADD CONSTRAINT "match_team_players_guest_user_id_fkey" FOREIGN KEY ("guest_user_id") REFERENCES "guest_users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "GroupPayment" ADD CONSTRAINT "GroupPayment_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "group_payments" ADD CONSTRAINT "group_payments_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "groups"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "GroupPayment" ADD CONSTRAINT "GroupPayment_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "group_payments" ADD CONSTRAINT "group_payments_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

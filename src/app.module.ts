@@ -5,7 +5,8 @@ import { DatabaseModule } from "./shared/database/database.module";
 import { AuthGuard } from "./modules/auth/auth.guard";
 import { APP_GUARD } from "@nestjs/core";
 import { UsersModule } from "./modules/users/users.module";
-import { GuestUserModule } from "./modules/guest-user/guest-user.module";
+import { GuestUsersModule } from "./modules/guest-users/guest-users.module";
+import { GroupsModule } from "./modules/groups/groups.module";
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { GuestUserModule } from "./modules/guest-user/guest-user.module";
     DatabaseModule,
     AuthModule,
     UsersModule,
-    GuestUserModule,
+    GuestUsersModule,
+    GroupsModule,
   ],
   controllers: [],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }],

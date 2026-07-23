@@ -5,7 +5,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUUID,
 } from "class-validator";
 
 export class CreateGuestUserDto {
@@ -15,9 +14,6 @@ export class CreateGuestUserDto {
   @IsEnum(PositionEnum)
   @IsNotEmpty()
   position!: PositionEnum;
-  @IsUUID()
-  @IsNotEmpty()
-  groupId!: string;
   @IsEnum(UserRank)
   @IsOptional()
   rank?: UserRank;

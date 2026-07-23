@@ -36,10 +36,11 @@ enum FrequencyType {
   MONTHLY
 }
 
-enum GroupUserType {
+enum GroupMemberType {
   MONTHLY
   DAILY
   GUEST
+  OWNER
 }
 
 model User {
@@ -54,7 +55,7 @@ model User {
   createdAt           DateTime             @default(now()) @map("created_at")
   updatedAt           DateTime             @updatedAt @map("updated_at")
   groups              Group[]
-  groupUsers          GroupUser[]
+  groupMembers        GroupMember[]
   groupMatchPresences GroupMatchPresence[]
   matchTeamPlayers    MatchTeamPlayer[]
   groupPayments       GroupPayment[]
@@ -69,9 +70,11 @@ model GuestUser {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  groupUsers          GroupUser[]
+  groupMembers        GroupMember[]
   groupMatchPresences GroupMatchPresence[]
   matchTeamPlayers    MatchTeamPlayer[]
+
+  @@map("guest_users")
 }
 
 model Group {
@@ -88,29 +91,29 @@ model Group {
   owner         User           @relation(fields: [ownerId], references: [id])
   groupInvites  GroupInvite[]
   groupMatches  GroupMatch[]
-  groupUsers    GroupUser[]
+  groupMembers  GroupMember[]
   groupPayments GroupPayment[]
 
   @@map("groups")
 }
 
-model GroupUser {
-  id          String        @id @default(uuid())
-  groupId     String        @map("group_id")
-  userId      String?       @map("user_id")
+model GroupMember {
+  id          String          @id @default(uuid())
+  groupId     String          @map("group_id")
+  userId      String?         @map("user_id")
   rank        Rank?
-  type        GroupUserType
-  guestUserId String?       @map("guest_user_id")
-  createdAt   DateTime      @default(now()) @map("created_at")
-  updatedAt   DateTime      @updatedAt @map("updated_at")
+  type        GroupMemberType
+  guestUserId String?         @map("guest_user_id")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
 
-  guestUser GuestUser? @relation(fields: [guestUserId], references: [id])
-  group     Group      @relation(fields: [groupId], references: [id])
+  guestUser GuestUser? @relation(fields: [guestUserId], references: [id], onDelete: Cascade)
+  group     Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
   user      User?      @relation(fields: [userId], references: [id])
 
   @@unique([groupId, userId])
   @@unique([groupId, guestUserId])
-  @@map("groups_users")
+  @@map("group_members")
 }
 
 model GroupInvite {
@@ -120,7 +123,7 @@ model GroupInvite {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  group Group @relation(fields: [groupId], references: [id])
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   @@map("group_invites")
 }
@@ -132,7 +135,7 @@ model GroupMatch {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  group               Group                @relation(fields: [groupId], references: [id])
+  group               Group                @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupMatchPresences GroupMatchPresence[]
   matchTeams          MatchTeam[]
 
@@ -147,9 +150,9 @@ model GroupMatchPresence {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  groupMatch GroupMatch @relation(fields: [groupMatchId], references: [id])
+  groupMatch GroupMatch @relation(fields: [groupMatchId], references: [id], onDelete: Cascade)
   user       User?      @relation(fields: [userId], references: [id])
-  guestUser  GuestUser? @relation(fields: [guestUserId], references: [id])
+  guestUser  GuestUser? @relation(fields: [guestUserId], references: [id], onDelete: Cascade)
 
   @@unique([groupMatchId, userId])
   @@unique([groupMatchId, guestUserId])
@@ -166,7 +169,7 @@ model MatchTeam {
 
   matchTeamPlayers MatchTeamPlayer[]
 
-  groupMatch GroupMatch @relation(fields: [groupMatchId], references: [id])
+  groupMatch GroupMatch @relation(fields: [groupMatchId], references: [id], onDelete: Cascade)
 
   @@map("match_teams")
 }
@@ -179,9 +182,9 @@ model MatchTeamPlayer {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  matchTeam MatchTeam  @relation(fields: [matchTeamId], references: [id])
+  matchTeam MatchTeam  @relation(fields: [matchTeamId], references: [id], onDelete: Cascade)
   user      User?      @relation(fields: [userId], references: [id])
-  guestUser GuestUser? @relation(fields: [guestUserId], references: [id])
+  guestUser GuestUser? @relation(fields: [guestUserId], references: [id], onDelete: Cascade)
 
   @@unique([matchTeamId, userId])
   @@unique([matchTeamId, guestUserId])
@@ -197,6 +200,8 @@ model GroupPayment {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  group Group @relation(fields: [groupId], references: [id])
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
   user  User  @relation(fields: [userId], references: [id])
+
+  @@map("group_payments")
 }

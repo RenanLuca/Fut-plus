@@ -2,7 +2,7 @@ import { Global, Module } from "@nestjs/common";
 import { PrismaService } from "./prisma.service";
 import { UsersRepository } from "./repositories/users.repository";
 import { GuestUsersRepository } from "./repositories/guest-users-repository";
-import { GroupsUsersRepository } from "./repositories/groups-users-repository";
+import { GroupMembersRepository } from "./repositories/group-members-repository";
 import { GroupsRepository } from "./repositories/groups-repository";
 
 @Global()
@@ -11,13 +11,13 @@ import { GroupsRepository } from "./repositories/groups-repository";
     PrismaService,
     UsersRepository,
     GuestUsersRepository,
-    GroupsUsersRepository,
+    GroupMembersRepository,
     GroupsRepository,
   ],
   exports: [
     UsersRepository,
     GuestUsersRepository,
-    GroupsUsersRepository,
+    GroupMembersRepository,
     GroupsRepository,
   ],
 })

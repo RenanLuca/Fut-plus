@@ -1,5 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { Prisma } from "../../../../generated/prisma/client";
+import {
+  GroupMemberType,
+  Prisma,
+} from "../../../../generated/prisma/client";
 import { PrismaService } from "../prisma.service";
 
 @Injectable()
@@ -8,11 +11,38 @@ export class GroupsRepository {
   async create(createGroupDto: Prisma.GroupCreateArgs) {
     return this.prisma.group.create(createGroupDto);
   }
-  async findUnique(findUniqueGroupDto: Prisma.GroupFindUniqueArgs) {
+  async createWithOwner(
+    createGroupDto: Prisma.GroupUncheckedCreateInput,
+    ownerId: string,
+  ) {
+    return this.prisma.$transaction(async (tx) => {
+      const group = await tx.group.create({
+        data: createGroupDto,
+      });
+      await tx.groupMember.create({
+        data: {
+          userId: ownerId,
+          groupId: group.id,
+          type: GroupMemberType.OWNER,
+        },
+      });
+      return group;
+    });
+  }
+  async findUnique(
+    findUniqueGroupDto: Prisma.GroupFindUniqueArgs,
+  ) {
     return this.prisma.group.findUnique(findUniqueGroupDto);
   }
   async findFirst(findFirstGroupDto: Prisma.GroupFindFirstArgs) {
     return this.prisma.group.findFirst(findFirstGroupDto);
+  }
+  async findMany(findManyGroupDto: Prisma.GroupFindManyArgs) {
+    return this.prisma.group.findMany(findManyGroupDto);
+  }
+
+  async update(updateGroupDto: Prisma.GroupUpdateArgs) {
+    return this.prisma.group.update(updateGroupDto);
   }
 
   async delete(deleteGroupDto: Prisma.GroupDeleteArgs) {

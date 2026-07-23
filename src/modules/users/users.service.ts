@@ -8,8 +8,10 @@ import { UpdateUserDto } from "./dto/updateUser.dto";
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
-  private async verifyUserExists(userId: string) {
+  constructor(
+    private readonly usersRepository: UsersRepository,
+  ) {}
+  private async checkUserExists(userId: string) {
     const user = await this.usersRepository.findUnique({
       where: {
         id: userId,
@@ -21,7 +23,7 @@ export class UsersService {
     return user;
   }
 
-  private async verifyEmailAvailability(email: string) {
+  private async checkEmailAvailability(email: string) {
     const user = await this.usersRepository.findUnique({
       where: {
         email,
@@ -33,15 +35,15 @@ export class UsersService {
   }
 
   async getUserById(userId: string) {
-    const user = await this.verifyUserExists(userId);
+    const user = await this.checkUserExists(userId);
     const { hashedPassword, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }
 
   async update(userId: string, updateUserDto: UpdateUserDto) {
-    await this.verifyUserExists(userId);
+    await this.checkUserExists(userId);
     if (updateUserDto.email) {
-      await this.verifyEmailAvailability(updateUserDto.email);
+      await this.checkEmailAvailability(updateUserDto.email);
     }
     const updatedUser = await this.usersRepository.update({
       where: {
@@ -49,12 +51,13 @@ export class UsersService {
       },
       data: updateUserDto,
     });
-    const { hashedPassword, ...userWithoutPassword } = updatedUser;
+    const { hashedPassword, ...userWithoutPassword } =
+      updatedUser;
     return userWithoutPassword;
   }
 
   async delete(userId: string) {
-    await this.verifyUserExists(userId);
+    await this.checkUserExists(userId);
     return this.usersRepository.delete({
       where: {
         id: userId,
