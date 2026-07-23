@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { SigninDto } from "./dto/signin.dto";
 import { SignupDto } from "./dto/signup.dto";
-import { UsersRepository } from "@src/shared/database/repositories/users.repositories";
+import { UsersRepository } from "@src/shared/database/repositories/users.repository";
 import { compare, hash } from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
 

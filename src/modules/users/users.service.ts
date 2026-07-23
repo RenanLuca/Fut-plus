@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { UsersRepository } from "@src/shared/database/repositories/users.repositories";
+import { UsersRepository } from "@src/shared/database/repositories/users.repository";
 import { UpdateUserDto } from "./dto/updateUser.dto";
 
 @Injectable()
