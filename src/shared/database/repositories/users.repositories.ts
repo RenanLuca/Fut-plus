@@ -11,4 +11,10 @@ export class UsersRepository {
   async findUnique(findUniqueUserDto: Prisma.UserFindUniqueArgs) {
     return this.prisma.user.findUnique(findUniqueUserDto);
   }
+  async update(updateUserDto: Prisma.UserUpdateArgs) {
+    return this.prisma.user.update(updateUserDto);
+  }
+  async delete(deleteUserDto: Prisma.UserDeleteArgs) {
+    return this.prisma.user.delete(deleteUserDto);
+  }
 }
