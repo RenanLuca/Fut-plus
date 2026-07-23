@@ -4,9 +4,8 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { DatabaseModule } from "./shared/database/database.module";
 import { AuthGuard } from "./modules/auth/auth.guard";
 import { APP_GUARD } from "@nestjs/core";
-import { UsersModule } from './modules/users/users.module';
-import { GuestUserModule } from './modules/guest-user/guest-user.module';
-import { GuestUserModule } from './modules/guest-user/guest-user.module';
+import { UsersModule } from "./modules/users/users.module";
+import { GuestUserModule } from "./modules/guest-user/guest-user.module";
 
 @Module({
   imports: [

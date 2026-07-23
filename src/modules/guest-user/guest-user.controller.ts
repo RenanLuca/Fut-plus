@@ -18,9 +18,7 @@ export class GuestUserController {
 
   @Post()
   create(@Body() createGuestUserDto: CreateGuestUserDto) {
-    return this.guestUserService.createGuestUserAndConnectToGroup(
-      createGuestUserDto,
-    );
+    return this.guestUserService.create(createGuestUserDto);
   }
 
   @Get(":id")

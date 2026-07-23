@@ -1,5 +1,12 @@
 import { PositionEnum } from "@src/shared/enum/positionEnum";
-import { IsEnum, IsNotEmpty, IsString, IsUUID } from "class-validator";
+import { UserRank } from "@src/shared/enum/userRank";
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from "class-validator";
 
 export class CreateGuestUserDto {
   @IsString()
@@ -11,4 +18,7 @@ export class CreateGuestUserDto {
   @IsUUID()
   @IsNotEmpty()
   groupId!: string;
+  @IsEnum(UserRank)
+  @IsOptional()
+  rank?: UserRank;
 }

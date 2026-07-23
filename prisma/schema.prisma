@@ -98,7 +98,7 @@ model GroupUser {
   id          String        @id @default(uuid())
   groupId     String        @map("group_id")
   userId      String?       @map("user_id")
-  rank        Rank
+  rank        Rank?
   type        GroupUserType
   guestUserId String?       @map("guest_user_id")
   createdAt   DateTime      @default(now()) @map("created_at")
@@ -110,7 +110,7 @@ model GroupUser {
 
   @@unique([groupId, userId])
   @@unique([groupId, guestUserId])
-  @@map("group_users")
+  @@map("groups_users")
 }
 
 model GroupInvite {
