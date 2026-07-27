@@ -1,0 +1,33 @@
+meta {
+  name: Find all my groups
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/groups
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve listar os grupos do usuário autenticado", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.be.an('array');
+    const ids = res.getBody().map((group) => group.id);
+    expect(ids).to.include(bru.getVar("groupId"));
+  });
+}
+
+docs {
+  Só retorna grupos onde o usuário autenticado tem um GroupMember —
+  no caso do dono, isso inclui o grupo criado no request anterior.
+}

@@ -1,0 +1,32 @@
+meta {
+  name: Find all group members
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/groups/{{groupId}}/group-members
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve listar dono, guest e membro secundário", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.be.an('array');
+    expect(res.getBody().length).to.be.at.least(3);
+  });
+}
+
+docs {
+  Lista os GroupMember do grupo (dono criado junto do grupo, guest e
+  membro secundário criados nos requests anteriores).
+}

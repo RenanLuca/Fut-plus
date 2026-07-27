@@ -1,0 +1,48 @@
+meta {
+  name: Get me
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/users/me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve retornar os dados do usuário autenticado", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.have.property('id');
+    expect(res.getBody()).to.not.have.property('hashedPassword');
+    bru.setVar("userId", res.getBody().id);
+  });
+}
+
+docs {
+  Retorna o usuário dono do grupo (o mesmo do Signup/Signin). Captura o
+  userId, usado como ownerId implícito nos requests de grupo mais pra
+  frente.
+
+  ### Resposta 200
+  ```json
+  {
+    "id": "uuid",
+    "email": "owner.test@peladaplus.com",
+    "name": "Dono Teste",
+    "telefone": null,
+    "position": "STRIKER",
+    "profilePicture": null,
+    "createdAt": "...",
+    "updatedAt": "..."
+  }
+  ```
+}

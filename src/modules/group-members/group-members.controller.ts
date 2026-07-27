@@ -21,20 +21,9 @@ export class GroupMembersController {
     private readonly groupMembersService: GroupMembersService,
   ) {}
 
-  @Get()
-  findAllPerGroup(
-    @Param("groupId") groupId: string,
-    @ActiveUserId() userId: string,
-  ) {
-    return this.groupMembersService.findMembersByGroupId(
-      userId,
-      groupId,
-    );
-  }
-
   @Post()
   create(
-    @Param("groupId") groupId: string,
+    @Param("groupId", ParseUUIDPipe) groupId: string,
     @ActiveUserId() userId: string,
     @Body() createGroupMemberDto: CreateGroupMemberDto,
   ) {
@@ -42,6 +31,17 @@ export class GroupMembersController {
       groupId,
       createGroupMemberDto,
       userId,
+    );
+  }
+
+  @Get()
+  findAllPerGroup(
+    @Param("groupId", ParseUUIDPipe) groupId: string,
+    @ActiveUserId() userId: string,
+  ) {
+    return this.groupMembersService.findMembersByGroupId(
+      userId,
+      groupId,
     );
   }
 

@@ -1,0 +1,48 @@
+meta {
+  name: Join group
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/groups/{{groupId}}/group-members
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{authToken2}}
+}
+
+body:json {
+  {
+    "type": "MONTHLY",
+    "rank": "BRASILEIRAO"
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve conectar o usuário autenticado como membro MONTHLY", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody().type).to.equal("MONTHLY");
+    bru.setVar("userId2", res.getBody().userId);
+  });
+}
+
+docs {
+  Esse endpoint é "auto-entrada": quem é conectado ao grupo é sempre o
+  usuário autenticado (o campo userId do token), não um userId escolhido
+  no body — por isso usa o authToken2 (do "Signup 2"), não precisa ser o
+  dono nem já ser membro do grupo.
+
+  Captura o userId2 a partir da própria resposta (o GroupMember criado
+  já traz o userId), usado depois no "Remove member".
+}

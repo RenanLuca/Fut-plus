@@ -1,19 +1,29 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { GroupMembersRepository } from "@src/shared/database/repositories/group-members-repository";
 
+export type GroupMemberIdentifierType = "user" | "guest";
+
 @Injectable()
 export class UserBelongsToGroupService {
   constructor(
     private readonly groupMembersRepository: GroupMembersRepository,
   ) {}
-  async check(userId: string, groupId: string) {
-    const groupMember =
-      await this.groupMembersRepository.findUnique({
-        where: { groupId_userId: { groupId, userId } },
-      });
+  async check(
+    id: string,
+    groupId: string,
+    type: GroupMemberIdentifierType = "user",
+  ) {
+    const where =
+      type === "user"
+        ? { groupId_userId: { groupId, userId: id } }
+        : { groupId_guestUserId: { groupId, guestUserId: id } };
+
+    const groupMember = await this.groupMembersRepository.findUnique({
+      where,
+    });
     if (!groupMember) {
       throw new ForbiddenException(
-        `User does not belong to the group`,
+        `Member does not belong to the group`,
       );
     }
 

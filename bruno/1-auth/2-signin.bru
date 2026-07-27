@@ -1,0 +1,50 @@
+meta {
+  name: Signin
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/auth/signin
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "email": "owner.test@peladaplus.com",
+    "password": "senha123"
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve autenticar e retornar o accessToken", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody()).to.have.property('accessToken');
+    bru.setVar("authToken", res.getBody().accessToken);
+  });
+}
+
+docs {
+  Login com as credenciais criadas no "Signup".
+  Reautentica e sobrescreve o authToken — útil pra rodar de novo sem
+  precisar repetir o signup.
+  
+  Repara que o signin retorna 201, não 200 — o controller não sobrescreve
+  o status code padrão do Nest pra POST.
+  
+  ### Resposta 201
+  ```json
+  {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+  ```
+}

@@ -1,0 +1,37 @@
+meta {
+  name: Delete group
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/groups/{{groupId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve apagar o grupo, só o dono pode", function() {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  Cascade delete: apaga junto GroupMember, GroupInvite, GroupMatch (e
+  suas presenças/times) e GroupPayment desse grupo.
+
+  Atenção pra ordem se você for rodar a collection inteira de ponta a
+  ponta: esse request está na pasta 3-groups, mas as pastas
+  4-group-members, 5-guest-users e 6-group-matches ainda dependem do
+  grupo existir. Se for rodar tudo automaticamente em sequência, rode
+  esse request por último manualmente (ou pule-o na primeira passada) —
+  ele só faz sentido rodar depois de testar as pastas 4, 5 e 6.
+}

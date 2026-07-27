@@ -1,0 +1,35 @@
+meta {
+  name: Delete user
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseUrl}}/users
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve apagar a conta do dono", function() {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  Apaga a conta criada no "Signup". Depois disso o authToken deixa de
+  ser válido.
+
+  Cuidado rodando a collection inteira do início ao fim de uma vez: esse
+  request só funciona sem erro de foreign key se o grupo do dono já
+  tiver sido apagado antes (veja "Delete group", em 3-groups) — senão
+  o dono ainda tem um Group apontando pra ele.
+}

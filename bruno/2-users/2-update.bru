@@ -1,0 +1,42 @@
+meta {
+  name: Update me
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/users
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "name": "Dono Teste Atualizado"
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve atualizar o nome do usuário", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().name).to.equal("Dono Teste Atualizado");
+  });
+}
+
+docs {
+  Atualização parcial (todos os campos do UpdateUserDto são opcionais).
+  Aqui só troca o nome, pra não interferir no e-mail usado pelos outros
+  requests de login.
+}

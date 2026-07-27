@@ -1,0 +1,33 @@
+meta {
+  name: Find all matches
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/groups/{{groupId}}/group-matches
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve listar as partidas do grupo", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.be.an('array');
+    const ids = res.getBody().map((match) => match.id);
+    expect(ids).to.include(bru.getVar("matchId"));
+  });
+}
+
+docs {
+  Só exige que o usuário autenticado pertença ao grupo (não precisa ser
+  o dono, diferente de create/delete).
+}

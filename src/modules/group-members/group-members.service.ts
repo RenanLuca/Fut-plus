@@ -1,19 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { GroupMembersRepository } from "@src/shared/database/repositories/group-members-repository";
+import { GuestUsersRepository } from "@src/shared/database/repositories/guest-users-repository";
 import { UsersService } from "../users/users.service";
 import { GroupsService } from "../groups/groups.service";
-import { GroupMemberType } from "@src/shared/enum/groupMemberType";
 import { CreateGroupMemberDto } from "./dto/create-group-member.dto";
-import { GuestUsersService } from "../guest-users/guest-users.service";
 import { UserBelongsToGroupService } from "../groups/services/userBelongsToGroup.service";
 
 @Injectable()
 export class GroupMembersService {
   constructor(
     private readonly groupMembersRepository: GroupMembersRepository,
+    private readonly guestUsersRepository: GuestUsersRepository,
     private readonly groupsService: GroupsService,
     private readonly usersService: UsersService,
-    private readonly guestUsersService: GuestUsersService,
     private readonly usersBelongToGroupService: UserBelongsToGroupService,
   ) {}
 
@@ -24,7 +23,7 @@ export class GroupMembersService {
   ) {
     await this.groupsService.checkIfGroupExists(groupId);
     await this.usersService.checkIfUserExists(userId);
-    const { type, rank } = createGroupMemberDto;
+    const { type, rank, name, position } = createGroupMemberDto;
 
     if (type === "MONTHLY" || type === "DAILY") {
       return await this.groupMembersRepository.create({
@@ -37,10 +36,10 @@ export class GroupMembersService {
       });
     }
 
-    return await this.guestUsersService.create(
-      createGroupMemberDto,
+    return await this.guestUsersRepository.createAndConnectToGroup(
+      { name, position },
       groupId,
-      userId,
+      rank,
     );
   }
 
@@ -49,27 +48,38 @@ export class GroupMembersService {
     identifier: { userId?: string; guestUserId?: string },
   ) {
     await this.groupsService.checkIfGroupExists(groupId);
-    await this.usersBelongToGroupService.check(
-      identifier.userId || identifier.guestUserId!,
-      groupId,
-    );
 
-    const where = identifier.userId
-      ? {
+    if (identifier.userId) {
+      await this.usersBelongToGroupService.check(
+        identifier.userId,
+        groupId,
+        "user",
+      );
+      await this.groupMembersRepository.delete({
+        where: {
           groupId_userId: { groupId, userId: identifier.userId },
-        }
-      : {
-          groupId_guestUserId: {
-            groupId,
-            guestUserId: identifier.guestUserId!,
-          },
-        };
+        },
+      });
+      return;
+    }
 
-    await this.groupMembersRepository.delete({ where });
+    await this.usersBelongToGroupService.check(
+      identifier.guestUserId!,
+      groupId,
+      "guest",
+    );
+    await this.guestUsersRepository.delete({
+      where: { id: identifier.guestUserId! },
+    });
   }
+
   async findMembersByGroupId(userId: string, groupId: string) {
     await this.groupsService.checkIfGroupExists(groupId);
-    await this.usersBelongToGroupService.check(userId, groupId);
+    await this.usersBelongToGroupService.check(
+      userId,
+      groupId,
+      "user",
+    );
     return this.groupMembersRepository.findMany({
       where: {
         groupId,

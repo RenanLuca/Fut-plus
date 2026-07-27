@@ -1,0 +1,29 @@
+meta {
+  name: Delete match
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/groups/{{groupId}}/group-matches/{{matchId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve apagar a partida, só o dono pode", function() {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  Protegido por GroupOwnerGuard.
+}

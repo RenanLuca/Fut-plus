@@ -1,0 +1,31 @@
+meta {
+  name: Remove member
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/groups/{{groupId}}/group-members/user/{{userId2}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve remover o membro, só o dono pode", function() {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  Protegido por GroupOwnerGuard — precisa ser o dono pra remover outro
+  membro (diferente do "leave", que qualquer membro usa pra sair sozinho,
+  endpoint ainda não coberto nesta collection).
+}

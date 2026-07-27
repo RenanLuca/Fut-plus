@@ -1,0 +1,32 @@
+meta {
+  name: Find one group
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/groups/{{groupId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve retornar o grupo, já que o dono é membro dele", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().id).to.equal(bru.getVar("groupId"));
+  });
+}
+
+docs {
+  GET /groups/:id exige que o usuário autenticado seja membro do grupo
+  (via UserBelongsToGroupService) — como o dono sempre vira membro na
+  criação, esse request funciona com o authToken do dono.
+}

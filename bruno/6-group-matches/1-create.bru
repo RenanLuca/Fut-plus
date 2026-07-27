@@ -1,0 +1,43 @@
+meta {
+  name: Create match
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/groups/{{groupId}}/group-matches
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "matchDate": "2027-03-05T20:00:00.000Z"
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve criar a partida, só o dono pode", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody()).to.have.property('id');
+    bru.setVar("matchId", res.getBody().id);
+  });
+}
+
+docs {
+  Protegido por GroupOwnerGuard — precisa do authToken do dono.
+  matchDate está fixo no futuro (2027) de propósito, pra não virar data
+  passada com o tempo e quebrar o teste.
+}

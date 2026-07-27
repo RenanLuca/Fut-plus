@@ -1,0 +1,53 @@
+meta {
+  name: Create group
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/groups
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "name": "Pelada de Sexta",
+    "weekday": "FRIDAY",
+    "hour": "20:00",
+    "frequency": "MONTHLY",
+    "valuePerUser": 25
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve criar o grupo e conectar o dono como membro", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody()).to.have.property('id');
+    expect(res.getBody().ownerId).to.equal(bru.getVar("userId"));
+    bru.setVar("groupId", res.getBody().id);
+  });
+}
+
+docs {
+  Cria o grupo usado em todos os requests seguintes da collection.
+  Por trás, isso roda numa transaction que também cria o GroupMember
+  do tipo OWNER pro dono — por isso o teste confere o ownerId batendo
+  com o userId capturado no "Get me".
+
+  Valores válidos de weekday: SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
+  THURSDAY, FRIDAY, SATURDAY.
+  Valores válidos de frequency: EVENTUAL, MONTHLY.
+}

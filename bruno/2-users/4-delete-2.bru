@@ -1,0 +1,30 @@
+meta {
+  name: Delete user 2
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/users
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken2}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve apagar a conta do segundo usuário", function() {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  Apaga a conta criada no "Signup 2". Fecha o ciclo: rodando a collection
+  inteira do início ao fim, não sobra nenhum dado de teste no banco.
+}

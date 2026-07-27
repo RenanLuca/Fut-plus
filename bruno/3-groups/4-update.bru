@@ -1,0 +1,47 @@
+meta {
+  name: Update group
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/groups/{{groupId}}
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "name": "Pelada de Sexta (atualizada)",
+    "weekday": "FRIDAY",
+    "hour": "21:00",
+    "frequency": "MONTHLY",
+    "valuePerUser": 30
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve atualizar o grupo, só o dono pode", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().hour).to.equal("21:00");
+    expect(res.getBody().valuePerUser).to.equal(30);
+  });
+}
+
+docs {
+  PUT é substituição completa (não é PartialType) — precisa mandar
+  todos os campos do CreateGroupDto de novo, mesmo os que não mudaram.
+  Isso é proposital: PUT != PATCH.
+}

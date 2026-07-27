@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Pelada Plus API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

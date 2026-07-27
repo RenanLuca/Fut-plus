@@ -1,0 +1,33 @@
+meta {
+  name: Remove guest
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/groups/{{groupId}}/group-members/guest/{{guestUserId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve apagar o guest de verdade, não só o vínculo", function() {
+    expect(res.getStatus()).to.equal(204);
+  });
+}
+
+docs {
+  Esse delete apaga o GuestUser inteiro (não só o GroupMember) — por
+  causa do onDelete: Cascade, o GroupMember correspondente some junto.
+
+  Rode depois do "Find one guest user" (pasta 5-guest-users), senão esse
+  guest deixa de existir pros requests daquela pasta.
+}
