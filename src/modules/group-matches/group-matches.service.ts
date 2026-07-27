@@ -68,11 +68,12 @@ export class GroupMatchesService {
       },
       include: {
         groupMatchPresences: {
-          include: {
+          select: {
+            isPresent: true,
             user: {
               select: {
-                name: true,
                 id: true,
+                name: true,
                 position: true,
                 profilePicture: true,
               },
@@ -83,11 +84,11 @@ export class GroupMatchesService {
         matchTeams: {
           include: {
             matchTeamPlayers: {
-              include: {
+              select: {
                 user: {
                   select: {
-                    name: true,
                     id: true,
+                    name: true,
                     position: true,
                     profilePicture: true,
                   },
