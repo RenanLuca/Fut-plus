@@ -11,7 +11,7 @@ export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
   ) {}
-  private async checkUserExists(userId: string) {
+  async checkIfUserExists(userId: string) {
     const user = await this.usersRepository.findUnique({
       where: {
         id: userId,
@@ -35,13 +35,13 @@ export class UsersService {
   }
 
   async getUserById(userId: string) {
-    const user = await this.checkUserExists(userId);
+    const user = await this.checkIfUserExists(userId);
     const { hashedPassword, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }
 
   async update(userId: string, updateUserDto: UpdateUserDto) {
-    await this.checkUserExists(userId);
+    await this.checkIfUserExists(userId);
     if (updateUserDto.email) {
       await this.checkEmailAvailability(updateUserDto.email);
     }
@@ -57,7 +57,7 @@ export class UsersService {
   }
 
   async delete(userId: string) {
-    await this.checkUserExists(userId);
+    await this.checkIfUserExists(userId);
     return this.usersRepository.delete({
       where: {
         id: userId,

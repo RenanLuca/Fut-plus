@@ -5,17 +5,37 @@ import { PrismaService } from "../prisma.service";
 @Injectable()
 export class GroupMembersRepository {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createGroupMemberDto: Prisma.GroupMemberCreateArgs) {
+  async create(
+    createGroupMemberDto: Prisma.GroupMemberCreateArgs,
+  ) {
     return this.prisma.groupMember.create(createGroupMemberDto);
   }
-  async findUnique(findUniqueGroupMemberDto: Prisma.GroupMemberFindUniqueArgs) {
-    return this.prisma.groupMember.findUnique(findUniqueGroupMemberDto);
+  async findUnique(
+    findUniqueGroupMemberDto: Prisma.GroupMemberFindUniqueArgs,
+  ) {
+    return this.prisma.groupMember.findUnique(
+      findUniqueGroupMemberDto,
+    );
   }
-  async findFirst(findFirstGroupMemberDto: Prisma.GroupMemberFindFirstArgs) {
-    return this.prisma.groupMember.findFirst(findFirstGroupMemberDto);
+  async findFirst(
+    findFirstGroupMemberDto: Prisma.GroupMemberFindFirstArgs,
+  ) {
+    return this.prisma.groupMember.findFirst(
+      findFirstGroupMemberDto,
+    );
   }
 
-  async delete(deleteGroupMemberDto: Prisma.GroupMemberDeleteArgs) {
+  async findMany(
+    findManyGroupMemberDto: Prisma.GroupMemberFindManyArgs,
+  ) {
+    return this.prisma.groupMember.findMany(
+      findManyGroupMemberDto,
+    );
+  }
+
+  async delete(
+    deleteGroupMemberDto: Prisma.GroupMemberDeleteArgs,
+  ) {
     return this.prisma.groupMember.delete(deleteGroupMemberDto);
   }
 }

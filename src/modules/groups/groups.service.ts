@@ -22,7 +22,7 @@ export class GroupsService {
     );
   }
 
-  findAll(userId: string) {
+  findAllGroupsPerUser(userId: string) {
     return this.groupsRepository.findMany({
       where: {
         groupMembers: {
@@ -31,6 +31,7 @@ export class GroupsService {
       },
     });
   }
+
   async findOne(userId: string, id: string) {
     await this.userBelongsToGroupService.check(userId, id);
     await this.checkIfGroupExists(id);
@@ -60,7 +61,7 @@ export class GroupsService {
     });
   }
 
-  private async checkIfGroupExists(id: string) {
+  async checkIfGroupExists(id: string) {
     const group = await this.groupsRepository.findUnique({
       where: { id },
     });
@@ -70,10 +71,7 @@ export class GroupsService {
     return group;
   }
 
-  private async checkIfUserIsOwner(
-    groupId: string,
-    userId: string,
-  ) {
+  async checkIfUserIsOwner(groupId: string, userId: string) {
     const group = await this.checkIfGroupExists(groupId);
     if (group.ownerId !== userId) {
       throw new ForbiddenException(

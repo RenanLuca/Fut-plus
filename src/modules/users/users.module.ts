@@ -6,5 +6,6 @@ import { UsersRepository } from "@src/shared/database/repositories/users.reposit
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

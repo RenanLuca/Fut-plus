@@ -10,7 +10,6 @@ export class GuestUsersService {
   constructor(
     private readonly guestUsersRepository: GuestUsersRepository,
     private readonly groupsRepository: GroupsRepository,
-    private readonly groupMembersRepository: GroupMembersRepository,
     private readonly userBelongsToGroupService: UserBelongsToGroupService,
   ) {}
   async create(

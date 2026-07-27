@@ -121,7 +121,6 @@ model GroupInvite {
   groupId   String
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
 
   group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
 

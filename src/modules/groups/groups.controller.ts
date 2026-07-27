@@ -29,7 +29,7 @@ export class GroupsController {
 
   @Get()
   findAll(@ActiveUserId() userId: string) {
-    return this.groupsService.findAll(userId);
+    return this.groupsService.findAllGroupsPerUser(userId);
   }
 
   @Get(":id")
