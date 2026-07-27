@@ -10,6 +10,7 @@ import { GroupsModule } from "./modules/groups/groups.module";
 import { GroupMembersModule } from './modules/group-members/group-members.module';
 import { GroupMatchesModule } from './modules/group-matches/group-matches.module';
 import { MatchPresencesModule } from './modules/match-presences/match-presences.module';
+import { MatchTeamsModule } from './modules/match-teams/match-teams.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MatchPresencesModule } from './modules/match-presences/match-presences.
     GroupMembersModule,
     GroupMatchesModule,
     MatchPresencesModule,
+    MatchTeamsModule,
   ],
   controllers: [],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }],

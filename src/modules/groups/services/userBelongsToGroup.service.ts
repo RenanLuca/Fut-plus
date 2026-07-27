@@ -8,15 +8,19 @@ export class UserBelongsToGroupService {
   constructor(
     private readonly groupMembersRepository: GroupMembersRepository,
   ) {}
-  async check(
-    id: string,
-    groupId: string,
-    type: GroupMemberIdentifierType = "user",
-  ) {
+  async check({
+    memberId,
+    groupId,
+    type = "user",
+  }: {
+    memberId: string;
+    groupId: string;
+    type?: GroupMemberIdentifierType;
+  }) {
     const where =
       type === "user"
-        ? { groupId_userId: { groupId, userId: id } }
-        : { groupId_guestUserId: { groupId, guestUserId: id } };
+        ? { groupId_userId: { groupId, userId: memberId } }
+        : { groupId_guestUserId: { groupId, guestUserId: memberId } };
 
     const groupMember =
       await this.groupMembersRepository.findUnique({

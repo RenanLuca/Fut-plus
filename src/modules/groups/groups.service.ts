@@ -33,7 +33,10 @@ export class GroupsService {
   }
 
   async findOne(userId: string, id: string) {
-    await this.userBelongsToGroupService.check(userId, id);
+    await this.userBelongsToGroupService.check({
+      memberId: userId,
+      groupId: id,
+    });
     await this.checkIfGroupExists(id);
     return await this.groupsRepository.findUnique({
       where: { id },

@@ -19,11 +19,11 @@ export class GuestUsersService {
     groupId: string,
   ) {
     await this.groupsService.checkIfGroupExists(groupId);
-    await this.userBelongsToGroupService.check(
-      userId,
+    await this.userBelongsToGroupService.check({
+      memberId: userId,
       groupId,
-      "user",
-    );
+      type: "user",
+    });
     const user = await this.guestUsersRepository.findFirst({
       where: {
         id: guestUserId,

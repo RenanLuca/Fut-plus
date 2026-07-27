@@ -46,7 +46,10 @@ export class GroupMatchesService {
   }
 
   async findAll(groupId: string, userId: string) {
-    await this.usersBelongToGroupService.check(userId, groupId);
+    await this.usersBelongToGroupService.check({
+      memberId: userId,
+      groupId,
+    });
     return this.groupMatchesRepository.findMany({
       where: {
         groupId,
@@ -59,8 +62,11 @@ export class GroupMatchesService {
     matchId: string,
     userId: string,
   ) {
-    await this.usersBelongToGroupService.check(userId, groupId);
-    await this.checkIfMatchBelongsToGroup(groupId, matchId);
+    await this.usersBelongToGroupService.check({
+      memberId: userId,
+      groupId,
+    });
+    await this.checkIfMatchBelongsToGroup({ groupId, matchId });
     return await this.groupMatchesRepository.findOne({
       where: {
         id: matchId,
@@ -103,16 +109,19 @@ export class GroupMatchesService {
   }
 
   async remove(groupId: string, matchId: string) {
-    await this.checkIfMatchBelongsToGroup(groupId, matchId);
+    await this.checkIfMatchBelongsToGroup({ groupId, matchId });
     return this.groupMatchesRepository.delete({
       where: { id: matchId },
     });
   }
 
-  async checkIfMatchBelongsToGroup(
-    groupId: string,
-    matchId: string,
-  ) {
+  async checkIfMatchBelongsToGroup({
+    groupId,
+    matchId,
+  }: {
+    groupId: string;
+    matchId: string;
+  }) {
     const match = await this.groupMatchesRepository.findOne({
       where: {
         id: matchId,

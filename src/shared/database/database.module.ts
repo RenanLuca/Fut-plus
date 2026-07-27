@@ -6,6 +6,7 @@ import { GroupMembersRepository } from "./repositories/group-members.repository"
 import { GroupsRepository } from "./repositories/groups.repository";
 import { GroupMatchesRepository } from "./repositories/group-matches.repository";
 import { MatchPresencesRepository } from "./repositories/match-presences.repository";
+import { MatchTeamsRepository } from "./repositories/match-teams.repository";
 
 @Global()
 @Module({
@@ -17,6 +18,7 @@ import { MatchPresencesRepository } from "./repositories/match-presences.reposit
     GroupsRepository,
     GroupMatchesRepository,
     MatchPresencesRepository,
+    MatchTeamsRepository,
   ],
   exports: [
     UsersRepository,
@@ -25,6 +27,7 @@ import { MatchPresencesRepository } from "./repositories/match-presences.reposit
     GroupsRepository,
     GroupMatchesRepository,
     MatchPresencesRepository,
+    MatchTeamsRepository,
   ],
 })
 export class DatabaseModule {}

@@ -50,11 +50,11 @@ export class GroupMembersService {
     await this.groupsService.checkIfGroupExists(groupId);
 
     if (identifier.userId) {
-      await this.usersBelongToGroupService.check(
-        identifier.userId,
+      await this.usersBelongToGroupService.check({
+        memberId: identifier.userId,
         groupId,
-        "user",
-      );
+        type: "user",
+      });
       await this.groupMembersRepository.delete({
         where: {
           groupId_userId: { groupId, userId: identifier.userId },
@@ -63,11 +63,11 @@ export class GroupMembersService {
       return;
     }
 
-    await this.usersBelongToGroupService.check(
-      identifier.guestUserId!,
+    await this.usersBelongToGroupService.check({
+      memberId: identifier.guestUserId!,
       groupId,
-      "guest",
-    );
+      type: "guest",
+    });
     await this.guestUsersRepository.delete({
       where: { id: identifier.guestUserId! },
     });
@@ -75,11 +75,11 @@ export class GroupMembersService {
 
   async findMembersByGroupId(userId: string, groupId: string) {
     await this.groupsService.checkIfGroupExists(groupId);
-    await this.usersBelongToGroupService.check(
-      userId,
+    await this.usersBelongToGroupService.check({
+      memberId: userId,
       groupId,
-      "user",
-    );
+      type: "user",
+    });
     return this.groupMembersRepository.findMany({
       where: {
         groupId,

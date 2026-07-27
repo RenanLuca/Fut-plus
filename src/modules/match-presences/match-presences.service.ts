@@ -18,11 +18,14 @@ export class MatchPresencesService {
     matchId: string,
     updateMatchPresenceDto: UpdateMatchPresenceDto,
   ) {
-    await this.userBelongsToGroupService.check(userId, groupId);
-    await this.groupMatchesService.checkIfMatchBelongsToGroup(
+    await this.userBelongsToGroupService.check({
+      memberId: userId,
+      groupId,
+    });
+    await this.groupMatchesService.checkIfMatchBelongsToGroup({
       groupId,
       matchId,
-    );
+    });
     await this.matchPresencesRepository.upsert({
       where: {
         groupMatchId_userId: { groupMatchId: matchId, userId },

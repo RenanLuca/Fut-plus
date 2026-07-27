@@ -1,0 +1,33 @@
+meta {
+  name: Find one match team
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/groups/{{groupId}}/group-matches/{{matchId}}/match-teams/{{matchTeamId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve retornar o time, já validando que pertence a essa partida", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().id).to.equal(bru.getVar("matchTeamId"));
+    expect(res.getBody().groupMatchId).to.equal(bru.getVar("matchId"));
+  });
+}
+
+docs {
+  checkIfMatchTeamBelongsToMatch confere que esse matchTeamId pertence
+  mesmo a esse matchId antes de devolver — não é só "existe", é "existe
+  dentro desse contexto".
+}
