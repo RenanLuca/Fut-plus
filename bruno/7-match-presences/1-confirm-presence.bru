@@ -1,0 +1,46 @@
+meta {
+  name: Confirm presence
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{baseUrl}}/groups/{{groupId}}/group-matches/{{matchId}}/match-presences
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "isPresent": true
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve criar a presença como confirmada (upsert)", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.have.property('message');
+  });
+}
+
+docs {
+  Primeira chamada pra esse groupId+matchId: como a linha ainda não
+  existe, o upsert cria com isPresent: true.
+
+  Precisa rodar depois de "Create match" (pasta 6-group-matches) e antes
+  de "Delete match" (também em 6-group-matches) — se estiver rodando a
+  collection inteira em sequência, rode esta pasta (7) antes daquele
+  delete específico.
+}

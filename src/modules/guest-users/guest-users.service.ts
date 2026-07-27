@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateGuestUserDto } from "./dto/create-guest-user.dto";
-import { GuestUsersRepository } from "@src/shared/database/repositories/guest-users-repository";
-import { GroupsRepository } from "@src/shared/database/repositories/groups-repository";
-import { GroupMembersRepository } from "@src/shared/database/repositories/group-members-repository";
+import { GuestUsersRepository } from "@src/shared/database/repositories/guest-users.repository";
+import { GroupsRepository } from "@src/shared/database/repositories/groups.repository";
+import { GroupMembersRepository } from "@src/shared/database/repositories/group-members.repository";
 import { UserBelongsToGroupService } from "../groups/services/userBelongsToGroup.service";
 import { GroupsService } from "../groups/groups.service";
 

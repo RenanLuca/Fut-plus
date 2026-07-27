@@ -7,5 +7,6 @@ import { GroupsModule } from "../groups/groups.module";
   imports: [GroupsModule],
   controllers: [GroupMatchesController],
   providers: [GroupMatchesService],
+  exports: [GroupMatchesService],
 })
 export class GroupMatchesModule {}

@@ -1,0 +1,43 @@
+meta {
+  name: Decline presence
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/groups/{{groupId}}/group-matches/{{matchId}}/match-presences
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "isPresent": false
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve atualizar a mesma presença pra recusada (upsert)", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.have.property('message');
+  });
+}
+
+docs {
+  Mesmo groupId+matchId+usuário do "Confirm presence" — como a linha já
+  existe agora, o upsert atualiza isPresent pra false em vez de criar
+  outra. É o que distingue "confirmou que não vai" de "nunca respondeu"
+  (nesse segundo caso, não existiria linha nenhuma).
+}

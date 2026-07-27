@@ -5,8 +5,8 @@ import {
 } from "@nestjs/common";
 import { CreateGroupDto } from "./dto/create-group.dto";
 import { UpdateGroupDto } from "./dto/update-group.dto";
-import { GroupsRepository } from "@src/shared/database/repositories/groups-repository";
-import { GroupMembersRepository } from "@src/shared/database/repositories/group-members-repository";
+import { GroupsRepository } from "@src/shared/database/repositories/groups.repository";
+import { GroupMembersRepository } from "@src/shared/database/repositories/group-members.repository";
 import { UserBelongsToGroupService } from "./services/userBelongsToGroup.service";
 
 @Injectable()

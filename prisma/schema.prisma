@@ -144,6 +144,7 @@ model GroupMatch {
 model GroupMatchPresence {
   id           String   @id @default(uuid())
   groupMatchId String
+  isPresent    Boolean  @map("is_present")
   userId       String?
   guestUserId  String?  @map("guest_user_id")
   createdAt    DateTime @default(now()) @map("created_at")
