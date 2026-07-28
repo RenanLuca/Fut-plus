@@ -143,7 +143,7 @@ export class GroupPaymentsService {
       memberId: userId,
       groupId,
     });
-    const isOwner = await this.groupsService.checkIfUserIsOwner(
+    const isOwner = await this.groupsService.isUserOwner(
       groupId,
       userId,
     );

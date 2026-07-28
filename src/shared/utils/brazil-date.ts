@@ -11,8 +11,8 @@ export function getBrazilCalendarDate(
       brazilInstant.getUTCFullYear(),
       brazilInstant.getUTCMonth(),
       brazilInstant.getUTCDate(),
-      brazilInstant.getHours(),
-      brazilInstant.getMinutes(),
+      brazilInstant.getUTCHours(),
+      brazilInstant.getUTCMinutes(),
     ),
   );
 }

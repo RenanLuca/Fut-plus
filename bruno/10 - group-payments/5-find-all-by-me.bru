@@ -1,0 +1,37 @@
+meta {
+  name: Find all payments (me)
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/groups/{{groupId}}/group-payments/me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("usuário logado deve ver só os próprios pagamentos, paginados", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().data).to.be.an('array');
+    const ids = res.getBody().data.map((payment) => payment.id);
+    expect(ids).to.include(bru.getVar("paymentId"));
+    res.getBody().data.forEach((payment) => {
+      expect(payment.userId).to.equal(bru.getVar("userId"));
+    });
+  });
+}
+
+docs {
+  Sem guard de dono — qualquer membro do grupo vê a própria listagem
+  (ActiveUserId, não vem de :userId na rota). Diferente de "Find all
+  payments (group, owner)", que é a listagem geral só do dono.
+}

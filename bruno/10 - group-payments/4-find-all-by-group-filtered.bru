@@ -1,0 +1,49 @@
+meta {
+  name: Find all payments (group, filtrado por mes/ano)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/groups/{{groupId}}/group-payments?year={{year}}&month={{month}}
+  body: none
+  auth: bearer
+}
+
+params:query {
+  year: {{year}}
+  month: {{month}}
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+script:pre-request {
+  const now = new Date();
+  const brazilInstant = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+  bru.setVar("year", brazilInstant.getUTCFullYear());
+  bru.setVar("month", brazilInstant.getUTCMonth() + 1);
+}
+
+tests {
+  test("deve filtrar pelo mes/ano corrente e incluir o pagamento criado", function() {
+    expect(res.getStatus()).to.equal(200);
+    const ids = res.getBody().data.map((payment) => payment.id);
+    expect(ids).to.include(bru.getVar("paymentId"));
+  });
+}
+
+docs {
+  year/month são calculados no pre-request script (mesma lógica de
+  offset de -3h do brazil-date.ts) pra sempre bater com o mês em que o
+  pagamento de "Create payment (mensalista)" foi criado, sem hardcodar
+  uma data que quebraria com o tempo.
+
+  Passar month sem year é inválido (BadRequestException) — buildPeriodFilter
+  exige year quando month é informado.
+}

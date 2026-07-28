@@ -1,0 +1,32 @@
+meta {
+  name: Find one payment (outro membro, forbidden)
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/groups/{{groupId}}/group-payments/{{paymentId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken2}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("membro comum não deve ver pagamento de outro usuário", function() {
+    expect(res.getStatus()).to.equal(403);
+  });
+}
+
+docs {
+  authToken2 é o membro secundário (pasta 4-group-members / 1-auth), que
+  não é dono do grupo nem dono do pagamento {{paymentId}} (criado pelo
+  dono em "Create payment (mensalista)"). Deve tomar 403 do
+  ForbiddenException em findOne.
+}

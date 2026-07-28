@@ -1,0 +1,36 @@
+meta {
+  name: Find all payments (group, owner)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/groups/{{groupId}}/group-payments
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("dono deve ver a listagem geral paginada do grupo", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.have.property('data');
+    expect(res.getBody()).to.have.property('meta');
+    expect(res.getBody().data).to.be.an('array');
+    const ids = res.getBody().data.map((payment) => payment.id);
+    expect(ids).to.include(bru.getVar("paymentId"));
+  });
+}
+
+docs {
+  Protegido por GroupOwnerGuard — lista os pagamentos de todos os
+  membros do grupo. page/limit têm default (1/20) via PaginationQueryDto,
+  não precisam ser passados aqui.
+}

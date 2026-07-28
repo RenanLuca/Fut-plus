@@ -1,0 +1,43 @@
+meta {
+  name: Create payment (mensalista)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/groups/{{groupId}}/group-payments
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve criar o pagamento do mês corrente (sem matchId)", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody()).to.have.property('id');
+    expect(res.getBody().matchId).to.be.null;
+    expect(res.getBody()).to.have.property('period');
+    bru.setVar("paymentId", res.getBody().id);
+  });
+}
+
+docs {
+  Sem matchId no body = pagamento de mensalista. O period é calculado no
+  backend como o início do mês corrente no fuso do Brasil
+  (getBrazilCurrentMonthStart), não é algo que o cliente envia.
+}

@@ -1,0 +1,35 @@
+meta {
+  name: Find one payment (dono do pagamento)
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/groups/{{groupId}}/group-payments/{{paymentId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("usuário deve ver o próprio pagamento mesmo não sendo dono do grupo", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().id).to.equal(bru.getVar("paymentId"));
+  });
+}
+
+docs {
+  Aqui quem cria o grupo (dono) é o mesmo que criou o pagamento em
+  "Create payment (mensalista)", então esse request por si só não prova
+  o caso "membro comum vendo o próprio pagamento" — quem prova isso é o
+  isUserOwner (não-lançante) usado no findOne do service. O teste
+  "Find one payment (outro membro, forbidden)" cobre o caso negativo:
+  outro membro tentando ver o pagamento alheio.
+}

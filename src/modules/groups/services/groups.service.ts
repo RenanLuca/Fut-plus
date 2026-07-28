@@ -81,13 +81,20 @@ export class GroupsService {
   }
 
   async checkIfUserIsOwner(groupId: string, userId: string) {
-    const group = await this.checkIfGroupExists(groupId);
-    if (group.ownerId !== userId) {
+    const isOwner = await this.isUserOwner(groupId, userId);
+    if (!isOwner) {
       throw new ForbiddenException(
         `User is not the owner of the group`,
       );
     }
-    const isOwner = group.ownerId === userId;
     return isOwner;
+  }
+
+  async isUserOwner(
+    groupId: string,
+    userId: string,
+  ): Promise<boolean> {
+    const group = await this.checkIfGroupExists(groupId);
+    return group.ownerId === userId;
   }
 }

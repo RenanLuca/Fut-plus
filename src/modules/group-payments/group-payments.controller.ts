@@ -47,7 +47,7 @@ export class GroupPaymentsController {
     );
   }
 
-  @Get("user/:userId")
+  @Get("me")
   findAllByUser(
     @Param("groupId", ParseUUIDPipe) groupId: string,
     @ActiveUserId() userId: string,
