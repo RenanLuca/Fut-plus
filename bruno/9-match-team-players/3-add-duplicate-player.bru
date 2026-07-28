@@ -24,10 +24,6 @@ body:json {
   ]
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve recusar, o dono já está num time dessa partida", function() {
     expect(res.getStatus()).to.equal(409);

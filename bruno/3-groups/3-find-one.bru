@@ -14,10 +14,6 @@ auth:bearer {
   token: {{authToken}}
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve retornar o grupo, já que o dono é membro dele", function() {
     expect(res.getStatus()).to.equal(200);

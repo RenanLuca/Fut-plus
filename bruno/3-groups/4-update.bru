@@ -28,10 +28,6 @@ body:json {
   }
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve atualizar o grupo, só o dono pode", function() {
     expect(res.getStatus()).to.equal(200);

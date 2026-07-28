@@ -14,10 +14,6 @@ auth:bearer {
   token: {{authToken}}
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("usuário deve ver o próprio pagamento mesmo não sendo dono do grupo", function() {
     expect(res.getStatus()).to.equal(200);

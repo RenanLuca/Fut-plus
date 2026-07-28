@@ -14,10 +14,6 @@ auth:bearer {
   token: {{authToken}}
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve separar confirmados, recusados e quem ainda não respondeu", function() {
     expect(res.getStatus()).to.equal(200);

@@ -30,10 +30,6 @@ body:json {
   ]
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve apagar o roster atual e recriar com os 2 jogadores", function() {
     expect(res.getStatus()).to.equal(200);

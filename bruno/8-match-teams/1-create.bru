@@ -25,10 +25,6 @@ body:json {
   }
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve criar o time, só o dono pode", function() {
     expect(res.getStatus()).to.equal(201);

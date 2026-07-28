@@ -14,10 +14,6 @@ auth:bearer {
   token: {{authToken}}
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve listar os times da partida com o roster de cada um", function() {
     expect(res.getStatus()).to.equal(200);

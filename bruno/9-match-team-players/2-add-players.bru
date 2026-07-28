@@ -24,10 +24,6 @@ body:json {
   ]
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve adicionar o guest ao time, sem mexer em quem já estava", function() {
     expect(res.getStatus()).to.equal(201);

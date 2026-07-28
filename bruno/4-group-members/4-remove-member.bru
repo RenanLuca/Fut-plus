@@ -14,10 +14,6 @@ auth:bearer {
   token: {{authToken}}
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve remover o membro, só o dono pode", function() {
     expect(res.getStatus()).to.equal(204);

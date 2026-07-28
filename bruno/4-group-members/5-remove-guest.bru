@@ -14,10 +14,6 @@ auth:bearer {
   token: {{authToken}}
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve apagar o guest de verdade, não só o vínculo", function() {
     expect(res.getStatus()).to.equal(204);

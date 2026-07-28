@@ -24,10 +24,6 @@ body:json {
   }
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve confirmar presença do membro secundário", function() {
     expect(res.getStatus()).to.equal(200);

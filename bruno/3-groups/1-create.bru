@@ -28,10 +28,6 @@ body:json {
   }
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve criar o grupo e conectar o dono como membro", function() {
     expect(res.getStatus()).to.equal(201);

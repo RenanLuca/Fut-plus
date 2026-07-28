@@ -27,10 +27,6 @@ body:json {
   }
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve criar o guest e conectar ao grupo", function() {
     expect(res.getStatus()).to.equal(201);

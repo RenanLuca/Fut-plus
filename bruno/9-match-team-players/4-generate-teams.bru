@@ -24,10 +24,6 @@ body:json {
   }
 }
 
-vars:pre-request {
-  baseUrl: http://localhost:3000
-}
-
 tests {
   test("deve apagar os times antigos e recriar 2 times distribuindo os confirmados", function() {
     expect(res.getStatus()).to.equal(201);
