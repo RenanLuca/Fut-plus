@@ -1,0 +1,43 @@
+meta {
+  name: Add players to a team
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/groups/{{groupId}}/group-matches/{{matchId}}/match-team-players/{{matchTeamId}}
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  [
+    { "guestUserId": "{{guestUserId}}" }
+  ]
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve adicionar o guest ao time, sem mexer em quem já estava", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody().count).to.equal(1);
+  });
+}
+
+docs {
+  Protegido por GroupOwnerGuard. Diferente do "Replace all", esse não
+  apaga ninguém — só insere os jogadores novos no time indicado pela URL.
+  O guest ainda não estava em nenhum time dessa partida, então passa sem
+  conflito.
+}

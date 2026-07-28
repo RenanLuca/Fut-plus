@@ -8,5 +8,6 @@ import { GroupsModule } from "../groups/groups.module";
   imports: [GroupMatchesModule, GroupsModule],
   controllers: [MatchTeamsController],
   providers: [MatchTeamsService],
+  exports: [MatchTeamsService],
 })
 export class MatchTeamsModule {}

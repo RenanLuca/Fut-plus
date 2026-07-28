@@ -7,10 +7,11 @@ import { APP_GUARD } from "@nestjs/core";
 import { UsersModule } from "./modules/users/users.module";
 import { GuestUsersModule } from "./modules/guest-users/guest-users.module";
 import { GroupsModule } from "./modules/groups/groups.module";
-import { GroupMembersModule } from './modules/group-members/group-members.module';
-import { GroupMatchesModule } from './modules/group-matches/group-matches.module';
-import { MatchPresencesModule } from './modules/match-presences/match-presences.module';
-import { MatchTeamsModule } from './modules/match-teams/match-teams.module';
+import { GroupMembersModule } from "./modules/group-members/group-members.module";
+import { GroupMatchesModule } from "./modules/group-matches/group-matches.module";
+import { MatchPresencesModule } from "./modules/match-presences/match-presences.module";
+import { MatchTeamsModule } from "./modules/match-teams/match-teams.module";
+import { MatchTeamPlayersModule } from "./modules/match-team-players/match-team-players.module";
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MatchTeamsModule } from './modules/match-teams/match-teams.module';
     GroupMatchesModule,
     MatchPresencesModule,
     MatchTeamsModule,
+    MatchTeamPlayersModule,
   ],
   controllers: [],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }],
