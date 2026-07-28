@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -14,6 +15,19 @@ export class MatchPresencesController {
   constructor(
     private readonly matchPresencesService: MatchPresencesService,
   ) {}
+
+  @Get()
+  findAll(
+    @Param("groupId", ParseUUIDPipe) groupId: string,
+    @Param("matchId", ParseUUIDPipe) matchId: string,
+    @ActiveUserId() userId: string,
+  ) {
+    return this.matchPresencesService.findMatchPresences(
+      groupId,
+      matchId,
+      userId,
+    );
+  }
 
   @Patch()
   async updateMatchPresence(

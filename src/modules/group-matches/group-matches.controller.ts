@@ -41,17 +41,17 @@ export class GroupMatchesController {
     return this.groupMatchesService.findAll(groupId, userId);
   }
 
-  @Get(":id")
+  @Get(":matchId")
   findOne(
     @Param("groupId", ParseUUIDPipe) groupId: string,
-    @Param("id", ParseUUIDPipe) id: string,
+    @Param("matchId", ParseUUIDPipe) matchId: string,
     @ActiveUserId() userId: string,
   ) {
-    return this.groupMatchesService.findOneMatchDetailed(
+    return this.groupMatchesService.findOne({
       groupId,
-      id,
+      matchId,
       userId,
-    );
+    });
   }
 
   @UseGuards(GroupOwnerGuard)

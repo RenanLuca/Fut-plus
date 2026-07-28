@@ -52,6 +52,21 @@ export class MatchTeamsService {
       where: {
         groupMatchId: matchId,
       },
+      include: {
+        matchTeamPlayers: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                position: true,
+                profilePicture: true,
+              },
+            },
+            guestUser: true,
+          },
+        },
+      },
     });
   }
 
@@ -69,10 +84,33 @@ export class MatchTeamsService {
       groupId,
       matchId,
     });
-    return await this.checkIfMatchTeamBelongsToMatch({
-      matchTeamId,
-      matchId,
+    const matchTeam = await this.matchTeamsRepository.findOne({
+      where: {
+        id: matchTeamId,
+        groupMatchId: matchId,
+      },
+      include: {
+        matchTeamPlayers: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                position: true,
+                profilePicture: true,
+              },
+            },
+            guestUser: true,
+          },
+        },
+      },
     });
+    if (!matchTeam) {
+      throw new NotFoundException(
+        "Match team not found in this match",
+      );
+    }
+    return matchTeam;
   }
 
   async update(

@@ -83,57 +83,6 @@ export class GroupMatchesService {
     return match;
   }
 
-  async findOneMatchDetailed(
-    groupId: string,
-    matchId: string,
-    userId: string,
-  ) {
-    await this.usersBelongToGroupService.check({
-      memberId: userId,
-      groupId,
-    });
-    await this.checkIfMatchBelongsToGroup({ groupId, matchId });
-    return await this.groupMatchesRepository.findOne({
-      where: {
-        id: matchId,
-        groupId,
-      },
-      include: {
-        groupMatchPresences: {
-          select: {
-            isPresent: true,
-            user: {
-              select: {
-                id: true,
-                name: true,
-                position: true,
-                profilePicture: true,
-              },
-            },
-            guestUser: true,
-          },
-        },
-        matchTeams: {
-          include: {
-            matchTeamPlayers: {
-              select: {
-                user: {
-                  select: {
-                    id: true,
-                    name: true,
-                    position: true,
-                    profilePicture: true,
-                  },
-                },
-                guestUser: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
-
   async remove(groupId: string, matchId: string) {
     await this.checkIfMatchBelongsToGroup({ groupId, matchId });
     return this.groupMatchesRepository.delete({

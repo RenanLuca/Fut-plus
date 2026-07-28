@@ -25,4 +25,16 @@ export class MatchPresencesRepository {
       findMatchPresenceDto,
     );
   }
+  async findMany<
+    T extends Prisma.GroupMatchPresenceFindManyArgs,
+  >(
+    findManyMatchPresenceDto: Prisma.SelectSubset<
+      T,
+      Prisma.GroupMatchPresenceFindManyArgs
+    >,
+  ) {
+    return this.prisma.groupMatchPresence.findMany(
+      findManyMatchPresenceDto,
+    );
+  }
 }
