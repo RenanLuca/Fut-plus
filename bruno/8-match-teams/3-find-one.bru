@@ -19,10 +19,11 @@ vars:pre-request {
 }
 
 tests {
-  test("deve retornar o time, já validando que pertence a essa partida", function() {
+  test("deve retornar o time (com roster), já validando que pertence a essa partida", function() {
     expect(res.getStatus()).to.equal(200);
     expect(res.getBody().id).to.equal(bru.getVar("matchTeamId"));
     expect(res.getBody().groupMatchId).to.equal(bru.getVar("matchId"));
+    expect(res.getBody()).to.have.property('matchTeamPlayers');
   });
 }
 

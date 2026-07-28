@@ -19,15 +19,20 @@ vars:pre-request {
 }
 
 tests {
-  test("deve listar os times da partida", function() {
+  test("deve listar os times da partida com o roster de cada um", function() {
     expect(res.getStatus()).to.equal(200);
     expect(res.getBody()).to.be.an('array');
     const ids = res.getBody().map((team) => team.id);
     expect(ids).to.include(bru.getVar("matchTeamId"));
+    expect(res.getBody()[0]).to.have.property('matchTeamPlayers');
+    expect(res.getBody()[0].matchTeamPlayers).to.be.an('array');
   });
 }
 
 docs {
   Só exige que o usuário autenticado pertença ao grupo (não precisa ser
-  o dono, diferente de create/update).
+  o dono, diferente de create/update). matchTeamPlayers vem incluso
+  (esse domínio passou a ser dono do roster, antes só dava pra ver isso
+  via o findOneMatchDetailed antigo de group-matches). Aqui ainda vem
+  vazio porque roda antes de 9-match-team-players adicionar jogadores.
 }

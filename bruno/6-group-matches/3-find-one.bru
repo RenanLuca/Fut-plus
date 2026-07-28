@@ -19,19 +19,19 @@ vars:pre-request {
 }
 
 tests {
-  test("deve retornar a partida com presenças e times", function() {
+  test("deve retornar só a partida (sem presenças/times misturados)", function() {
     expect(res.getStatus()).to.equal(200);
     expect(res.getBody().id).to.equal(bru.getVar("matchId"));
-    expect(res.getBody()).to.have.property('groupMatchPresences');
-    expect(res.getBody()).to.have.property('matchTeams');
-    expect(res.getBody().groupMatchPresences).to.be.an('array');
-    expect(res.getBody().matchTeams).to.be.an('array');
+    expect(res.getBody()).to.have.property('matchDate');
+    expect(res.getBody()).to.not.have.property('groupMatchPresences');
+    expect(res.getBody()).to.not.have.property('matchTeams');
   });
 }
 
 docs {
-  Traz a partida com groupMatchPresences e matchTeams (com os jogadores
-  de cada time) via include do Prisma. Nesta collection eles vêm vazios,
-  já que ainda não existe endpoint pra confirmar presença nem montar
-  times — só o schema já modela isso.
+  Só traz o registro do match. Presenças (com quem confirmou, recusou ou
+  ainda não respondeu) e times ficaram nos domínios deles — ver
+  "Find all presences" em 7-match-presences e "Find all match teams" em
+  8-match-teams. Antes existia um findOneMatchDetailed que juntava os 3,
+  foi quebrado de propósito pra cada domínio expor só o que é dele.
 }

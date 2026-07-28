@@ -1,0 +1,46 @@
+meta {
+  name: Find all presences
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/groups/{{groupId}}/group-matches/{{matchId}}/match-presences
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve separar confirmados, recusados e quem ainda não respondeu", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.have.property('confirmed');
+    expect(res.getBody()).to.have.property('declined');
+    expect(res.getBody()).to.have.property('pending');
+
+    const confirmedIds = res.getBody().confirmed.map((member) => member.id);
+    const declinedIds = res.getBody().declined.map((member) => member.id);
+
+    expect(confirmedIds).to.include(bru.getVar("userId2"));
+    expect(declinedIds).to.include(bru.getVar("userId"));
+  });
+}
+
+docs {
+  Roda depois de "Confirm presence" + "Decline presence" (dono acabou
+  recusado) e "Confirm presence (secondary member)" (userId2 confirmado).
+  Como esta collection só tem esses 2 membros e ambos já responderam,
+  "pending" deve vir vazio aqui — o campo existe pra cobrir membros que
+  nunca chamaram o PATCH.
+
+  confirmed/declined/pending vêm da junção entre GroupMember (todo mundo
+  do grupo) e GroupMatchPresence (quem respondeu pra esse matchId); quem
+  está no primeiro mas não no segundo cai em pending.
+}
