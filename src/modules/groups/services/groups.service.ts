@@ -87,5 +87,7 @@ export class GroupsService {
         `User is not the owner of the group`,
       );
     }
+    const isOwner = group.ownerId === userId;
+    return isOwner;
   }
 }

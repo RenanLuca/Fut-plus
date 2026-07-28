@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { UpdateMatchPresenceDto } from "./dto/updateMatchPresence.dto";
 import { MatchPresencesRepository } from "@src/shared/database/repositories/match-presences.repository";
 import { UserBelongsToGroupService } from "../groups/services/userBelongsToGroup.service";
@@ -42,5 +42,34 @@ export class MatchPresencesService {
     return {
       message: "Match presence updated successfully",
     };
+  }
+
+  async checkIfUserWentToMatch({
+    userId,
+    matchId,
+  }: {
+    userId: string;
+    matchId: string;
+  }) {
+    const matchPresence =
+      await this.matchPresencesRepository.findOne({
+        where: {
+          groupMatchId_userId: { groupMatchId: matchId, userId },
+        },
+        select: {
+          groupMatch: {
+            select: { matchDate: true },
+          },
+          isPresent: true,
+          groupMatchId: true,
+        },
+      });
+    if (!matchPresence?.groupMatch.matchDate) {
+      throw new NotFoundException("Presence not found");
+    }
+    if (matchPresence.groupMatch.matchDate > new Date()) {
+      throw new NotFoundException("Match has not happened yet");
+    }
+    return matchPresence.isPresent;
   }
 }

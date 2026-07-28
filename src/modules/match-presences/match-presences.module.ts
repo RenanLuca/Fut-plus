@@ -8,5 +8,6 @@ import { GroupsModule } from "../groups/groups.module";
   imports: [GroupMatchesModule, GroupsModule],
   controllers: [MatchPresencesController],
   providers: [MatchPresencesService],
+  exports: [MatchPresencesService],
 })
 export class MatchPresencesModule {}

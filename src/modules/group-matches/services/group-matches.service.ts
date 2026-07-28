@@ -57,7 +57,33 @@ export class GroupMatchesService {
     });
   }
 
-  async findOne(
+  async findOne({
+    groupId,
+    matchId,
+    userId,
+  }: {
+    groupId: string;
+    matchId: string;
+    userId: string;
+  }) {
+    await this.usersBelongToGroupService.check({
+      memberId: userId,
+      groupId,
+    });
+    await this.checkIfMatchBelongsToGroup({ groupId, matchId });
+    const match = await this.groupMatchesRepository.findOne({
+      where: {
+        id: matchId,
+        groupId,
+      },
+    });
+    if (!match) {
+      throw new NotFoundException("Match not found");
+    }
+    return match;
+  }
+
+  async findOneMatchDetailed(
     groupId: string,
     matchId: string,
     userId: string,

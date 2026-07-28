@@ -8,6 +8,10 @@ import { FrequencyType } from "@src/shared/enum/FrequencyType";
 import { Weekday } from "@src/shared/enum/weekday";
 import { GroupMatchesService } from "./group-matches.service";
 import { GroupsService } from "@src/modules/groups/services/groups.service";
+import {
+  BRAZIL_UTC_OFFSET_HOURS,
+  getBrazilCalendarDate,
+} from "@src/shared/utils/brazil-date";
 
 const WEEKDAY_BY_JS_DAY: Weekday[] = [
   Weekday.SUNDAY,
@@ -20,8 +24,6 @@ const WEEKDAY_BY_JS_DAY: Weekday[] = [
 ];
 
 const MINIMUM_DAYS_BEFORE_MATCH_TO_GENERATE = 5;
-
-const BRAZIL_UTC_OFFSET_HOURS = 3;
 
 @Injectable()
 export class GroupMatchesSchedulerService {
@@ -38,7 +40,7 @@ export class GroupMatchesSchedulerService {
     timeZone: "America/Sao_Paulo",
   })
   async generateUpcomingMatches() {
-    const todayInBrazil = this.getBrazilCalendarDate(new Date());
+    const todayInBrazil = getBrazilCalendarDate(new Date());
     const targetDate = new Date(todayInBrazil);
     targetDate.setUTCDate(
       targetDate.getUTCDate() +
@@ -62,18 +64,6 @@ export class GroupMatchesSchedulerService {
           group.hour,
           targetDate,
         ),
-      ),
-    );
-  }
-  private getBrazilCalendarDate(date: Date): Date {
-    const brazilInstant = new Date(
-      date.getTime() - BRAZIL_UTC_OFFSET_HOURS * 60 * 60 * 1000,
-    );
-    return new Date(
-      Date.UTC(
-        brazilInstant.getUTCFullYear(),
-        brazilInstant.getUTCMonth(),
-        brazilInstant.getUTCDate(),
       ),
     );
   }

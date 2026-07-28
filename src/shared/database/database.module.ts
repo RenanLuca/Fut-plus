@@ -8,6 +8,7 @@ import { GroupMatchesRepository } from "./repositories/group-matches.repository"
 import { MatchPresencesRepository } from "./repositories/match-presences.repository";
 import { MatchTeamsRepository } from "./repositories/match-teams.repository";
 import { MatchTeamsPlayersRepository } from "./repositories/match-team-players.repository";
+import { GroupPaymentsRepository } from "./repositories/group-payments.repository";
 
 @Global()
 @Module({
@@ -21,6 +22,7 @@ import { MatchTeamsPlayersRepository } from "./repositories/match-team-players.r
     MatchPresencesRepository,
     MatchTeamsRepository,
     MatchTeamsPlayersRepository,
+    GroupPaymentsRepository,
   ],
   exports: [
     UsersRepository,
@@ -31,6 +33,7 @@ import { MatchTeamsPlayersRepository } from "./repositories/match-team-players.r
     MatchPresencesRepository,
     MatchTeamsRepository,
     MatchTeamsPlayersRepository,
+    GroupPaymentsRepository,
   ],
 })
 export class DatabaseModule {}

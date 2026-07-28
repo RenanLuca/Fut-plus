@@ -13,4 +13,16 @@ export class MatchPresencesRepository {
       create: upsertMatchPresenceDto.create,
     });
   }
+  async findOne<
+    T extends Prisma.GroupMatchPresenceFindUniqueArgs,
+  >(
+    findMatchPresenceDto: Prisma.SelectSubset<
+      T,
+      Prisma.GroupMatchPresenceFindUniqueArgs
+    >,
+  ) {
+    return this.prisma.groupMatchPresence.findUnique(
+      findMatchPresenceDto,
+    );
+  }
 }

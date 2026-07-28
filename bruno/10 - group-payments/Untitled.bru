@@ -1,0 +1,20 @@
+meta {
+  name: Untitled
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/groups/{{groupId}}/group-payments
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  groupId: eb5cb7e9-2e53-4084-b09b-d72b957e24fa
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

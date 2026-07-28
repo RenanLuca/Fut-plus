@@ -47,7 +47,11 @@ export class GroupMatchesController {
     @Param("id", ParseUUIDPipe) id: string,
     @ActiveUserId() userId: string,
   ) {
-    return this.groupMatchesService.findOne(groupId, id, userId);
+    return this.groupMatchesService.findOneMatchDetailed(
+      groupId,
+      id,
+      userId,
+    );
   }
 
   @UseGuards(GroupOwnerGuard)

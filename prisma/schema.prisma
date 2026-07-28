@@ -138,6 +138,7 @@ model GroupMatch {
   groupMatchPresences GroupMatchPresence[]
   matchTeams          MatchTeam[]
   matchTeamPlayers    MatchTeamPlayer[]
+  groupPayments       GroupPayment[]
 
   @@unique([groupId, matchDate])
   @@map("group_matches")
@@ -201,13 +202,15 @@ model GroupPayment {
   id        String   @id @default(uuid())
   groupId   String   @map("group_id")
   userId    String   @map("user_id")
-  period    DateTime
+  matchId   String?  @map("match_id")
+  period    DateTime @db.Date
   receipt   String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  user  User  @relation(fields: [userId], references: [id])
+  match GroupMatch? @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  group Group       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User        @relation(fields: [userId], references: [id])
 
   @@map("group_payments")
 }
