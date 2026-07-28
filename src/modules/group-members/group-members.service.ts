@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { GroupMembersRepository } from "@src/shared/database/repositories/group-members.repository";
 import { GuestUsersRepository } from "@src/shared/database/repositories/guest-users.repository";
 import { UsersService } from "../users/users.service";
-import { GroupsService } from "../groups/groups.service";
+import { GroupsService } from "../groups/services/groups.service";
 import { CreateGroupMemberDto } from "./dto/create-group-member.dto";
 import { UserBelongsToGroupService } from "../groups/services/userBelongsToGroup.service";
 

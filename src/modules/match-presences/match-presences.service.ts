@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { UpdateMatchPresenceDto } from "./dto/updateMatchPresence.dto";
 import { MatchPresencesRepository } from "@src/shared/database/repositories/match-presences.repository";
 import { UserBelongsToGroupService } from "../groups/services/userBelongsToGroup.service";
-import { GroupMatchesService } from "../group-matches/group-matches.service";
+import { GroupMatchesService } from "../group-matches/services/group-matches.service";
 
 @Injectable()
 export class MatchPresencesService {

@@ -25,12 +25,13 @@ export class GroupMembersRepository {
     );
   }
 
-  async findMany(
-    findManyGroupMemberDto: Prisma.GroupMemberFindManyArgs,
+  async findMany<T extends Prisma.GroupMemberFindManyArgs>(
+    findManyGroupMemberDto: Prisma.SelectSubset<
+      T,
+      Prisma.GroupMemberFindManyArgs
+    >,
   ) {
-    return this.prisma.groupMember.findMany(
-      findManyGroupMemberDto,
-    );
+    return this.prisma.groupMember.findMany(findManyGroupMemberDto);
   }
 
   async delete(

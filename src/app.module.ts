@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { ScheduleModule } from "@nestjs/schedule";
 import { AuthModule } from "./modules/auth/auth.module";
 import { DatabaseModule } from "./shared/database/database.module";
 import { AuthGuard } from "./modules/auth/auth.guard";
@@ -16,6 +17,7 @@ import { MatchTeamPlayersModule } from "./modules/match-team-players/match-team-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
     DatabaseModule,
     AuthModule,
     UsersModule,

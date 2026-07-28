@@ -10,7 +10,7 @@ import {
   HttpCode,
   ParseUUIDPipe,
 } from "@nestjs/common";
-import { GroupsService } from "./groups.service";
+import { GroupsService } from "./services/groups.service";
 import { CreateGroupDto } from "./dto/create-group.dto";
 import { UpdateGroupDto } from "./dto/update-group.dto";
 import { ActiveUserId } from "@src/shared/decorators/ActiveUserId";

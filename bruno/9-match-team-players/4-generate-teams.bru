@@ -1,0 +1,54 @@
+meta {
+  name: Generate match teams
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/groups/{{groupId}}/group-matches/{{matchId}}/match-teams/generate
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "teamCount": 2
+  }
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+}
+
+tests {
+  test("deve apagar os times antigos e recriar 2 times distribuindo os confirmados", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody()).to.be.an('array');
+    expect(res.getBody().length).to.equal(2);
+  });
+}
+
+docs {
+  Protegido por GroupOwnerGuard. Apaga todos os MatchTeam existentes
+  dessa partida (incluindo o time usado nos requests anteriores desta
+  pasta, com o roster montado manualmente) e recria do zero: teamCount
+  times, distribuindo quem confirmou presença
+  (GroupMatchPresence.isPresent: true) entre eles por posição/rank.
+
+  Roda por último de propósito, depois de "Replace all match team
+  players" / "Add players" / "Add duplicate player" — como esse request
+  apaga o time que o {{matchTeamId}} aponta, ele invalidaria os outros
+  requests desta pasta se rodasse antes deles.
+
+  Precisa de "Confirm presence (secondary member)" (pasta
+  7-match-presences) já ter rodado, senão não sobra ninguém confirmado
+  pra distribuir e os times saem vazios.
+}

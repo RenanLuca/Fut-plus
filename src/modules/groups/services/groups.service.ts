@@ -3,11 +3,11 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { CreateGroupDto } from "./dto/create-group.dto";
-import { UpdateGroupDto } from "./dto/update-group.dto";
+import { CreateGroupDto } from "../dto/create-group.dto";
+import { UpdateGroupDto } from "../dto/update-group.dto";
 import { GroupsRepository } from "@src/shared/database/repositories/groups.repository";
-import { GroupMembersRepository } from "@src/shared/database/repositories/group-members.repository";
-import { UserBelongsToGroupService } from "./services/userBelongsToGroup.service";
+import { UserBelongsToGroupService } from "./userBelongsToGroup.service";
+import { FrequencyType } from "@src/shared/enum/FrequencyType";
 
 @Injectable()
 export class GroupsService {
@@ -29,6 +29,12 @@ export class GroupsService {
           some: { userId },
         },
       },
+    });
+  }
+
+  findAllByFrequency(frequency: FrequencyType) {
+    return this.groupsRepository.findMany({
+      where: { frequency },
     });
   }
 

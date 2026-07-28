@@ -4,7 +4,7 @@ import { GuestUsersRepository } from "@src/shared/database/repositories/guest-us
 import { GroupsRepository } from "@src/shared/database/repositories/groups.repository";
 import { GroupMembersRepository } from "@src/shared/database/repositories/group-members.repository";
 import { UserBelongsToGroupService } from "../groups/services/userBelongsToGroup.service";
-import { GroupsService } from "../groups/groups.service";
+import { GroupsService } from "../groups/services/groups.service";
 
 @Injectable()
 export class GuestUsersService {

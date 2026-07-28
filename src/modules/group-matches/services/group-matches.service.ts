@@ -4,9 +4,9 @@ import {
   ConflictException,
   NotFoundException,
 } from "@nestjs/common";
-import { CreateGroupMatchDto } from "./dto/create-group-match.dto";
-import { GroupMatchesRepository } from "../../shared/database/repositories/group-matches.repository";
-import { UserBelongsToGroupService } from "../groups/services/userBelongsToGroup.service";
+import { UserBelongsToGroupService } from "@src/modules/groups/services/userBelongsToGroup.service";
+import { GroupMatchesRepository } from "@src/shared/database/repositories/group-matches.repository";
+import { CreateGroupMatchDto } from "../dto/create-group-match.dto";
 
 @Injectable()
 export class GroupMatchesService {

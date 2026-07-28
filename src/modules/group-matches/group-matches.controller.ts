@@ -10,7 +10,7 @@ import {
   HttpStatus,
   ParseUUIDPipe,
 } from "@nestjs/common";
-import { GroupMatchesService } from "./group-matches.service";
+import { GroupMatchesService } from "./services/group-matches.service";
 import { CreateGroupMatchDto } from "./dto/create-group-match.dto";
 import { ActiveUserId } from "@src/shared/decorators/ActiveUserId";
 import { GroupOwnerGuard } from "../groups/guards/group-owner.guard";

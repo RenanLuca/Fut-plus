@@ -1,10 +1,10 @@
 import { ConflictException, Injectable } from "@nestjs/common";
 import { MatchTeamRosterDto } from "./dto/match-team-roster.dto";
-import { GroupMatchesService } from "../group-matches/group-matches.service";
 import { MatchTeamsService } from "../match-teams/match-teams.service";
 import { MatchTeamsPlayersRepository } from "@src/shared/database/repositories/match-team-players.repository";
 import { MatchTeamPlayerDto } from "./dto/match-team-player.dto";
 import { UserBelongsToGroupService } from "../groups/services/userBelongsToGroup.service";
+import { GroupMatchesService } from "../group-matches/services/group-matches.service";
 
 @Injectable()
 export class MatchTeamPlayersService {
@@ -133,12 +133,13 @@ export class MatchTeamPlayersService {
     userId?: string;
     guestUserId?: string;
   }) {
-    const existing = await this.matchTeamPlayersRepository.findFirst({
-      where: {
-        groupMatchId: matchId,
-        ...(userId ? { userId } : { guestUserId }),
-      },
-    });
+    const existing =
+      await this.matchTeamPlayersRepository.findFirst({
+        where: {
+          groupMatchId: matchId,
+          ...(userId ? { userId } : { guestUserId }),
+        },
+      });
     if (existing) {
       throw new ConflictException(
         "Player is already assigned to a team in this match",

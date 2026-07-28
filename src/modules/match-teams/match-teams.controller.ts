@@ -12,6 +12,7 @@ import {
 import { MatchTeamsService } from "./match-teams.service";
 import { CreateMatchTeamDto } from "./dto/create-match-team.dto";
 import { UpdateMatchTeamDto } from "./dto/update-match-team.dto";
+import { GenerateMatchTeamsDto } from "./dto/generate-match-teams.dto";
 import { GroupOwnerGuard } from "../groups/guards/group-owner.guard";
 import { ActiveUserId } from "@src/shared/decorators/ActiveUserId";
 
@@ -31,6 +32,20 @@ export class MatchTeamsController {
       createMatchTeamDto,
       matchId,
       groupId,
+    );
+  }
+
+  @UseGuards(GroupOwnerGuard)
+  @Post("generate")
+  generate(
+    @Param("groupId", ParseUUIDPipe) groupId: string,
+    @Param("matchId", ParseUUIDPipe) matchId: string,
+    @Body() generateMatchTeamsDto: GenerateMatchTeamsDto,
+  ) {
+    return this.matchTeamsService.generate(
+      groupId,
+      matchId,
+      generateMatchTeamsDto,
     );
   }
 

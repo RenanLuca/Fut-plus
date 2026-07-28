@@ -139,6 +139,7 @@ model GroupMatch {
   matchTeams          MatchTeam[]
   matchTeamPlayers    MatchTeamPlayer[]
 
+  @@unique([groupId, matchDate])
   @@map("group_matches")
 }
 
